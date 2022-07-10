@@ -1,6 +1,7 @@
 package me.gabl.xml.tree;
 
 import de.natrox.common.validate.Check;
+import me.gabl.xml.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,12 +12,12 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
 
     private final String name;
     private final Map<String, String> attributes;
-    private final List<XMLItem> content;
+    private final List<XMLItem> items;
 
-    XMLElement(String name, Map<String, String> attributes, List<XMLItem> content) {
+    XMLElement(String name, Map<String, String> attributes, List<XMLItem> items) {
         this.name = name;
         this.attributes = attributes;
-        this.content = content;
+        this.items = items;
     }
 
     public static Element.Builder builder(String name) {
@@ -40,13 +41,13 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
 
     @Override
     public List<XMLItem> items() {
-        return Collections.unmodifiableList(content);
+        return Collections.unmodifiableList(items);
     }
 
     @NotNull
     @Override
     public ListIterator<XMLItem> iterator() {
-        return this.content.listIterator();
+        return this.items.listIterator();
     }
 
     static final class Builder implements XMLItem.Element.Builder {
@@ -58,6 +59,8 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
         Builder(String name) {
             Check.argCondition(name.contains(" "), "Name must not contain ' '.");
             Check.argCondition(name.contains(">"), "Name must not contain >.");
+            Check.argCondition(StringUtil.startsWith(name, "xml", true), "Name must not start with 'xml'.");
+            Check.argCondition(!(Character.isLetter(name.charAt(0)) || name.charAt(0) == '_'), "Name must start with a letter or an underscore.'.");
             this.name = name;
             this.attributes = new HashMap<>();
             this.items = new LinkedList<>();
@@ -65,12 +68,14 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
 
         @Override
         public Element.Builder addAttributes(Map<String, String> attributes) {
-            this.attributes.putAll(attributes);
+            for (Map.Entry<String, String> entry : attributes.entrySet())
+                this.addAttribute(entry.getKey(), entry.getValue());
             return this;
         }
 
         @Override
         public Element.Builder addAttribute(String key, String value) {
+            Check.argCondition(key.contains(" "), "Key must not contain ' '.");
             this.attributes.put(key, value);
             return this;
         }
@@ -78,6 +83,11 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
         @Override
         public boolean containsAttributes() {
             return !this.attributes.isEmpty();
+        }
+
+        @Override
+        public boolean containsAttribute(String key) {
+            return this.attributes.containsKey(key);
         }
 
         @Override

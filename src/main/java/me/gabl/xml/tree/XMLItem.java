@@ -41,6 +41,8 @@ sealed interface XMLItem {
 
             boolean containsAttributes();
 
+            boolean containsAttribute(String key);
+
             Builder addItems(List<XMLItem> items);
 
             Builder addItem(XMLItem item);
