@@ -1,0 +1,20 @@
+# This place is full of ideas and thoughts.
+# You do not have to understand/read this.
+
+&entity
+
+DTD (encoding)
+
+&name;
+
+&lt; "<"
+&gt; ">"
+&amp; "&"
+&apos; '
+&quot; "
+
+UNICODE CHARS:
+
+&#nnnn; n e N
+or
+&#xhhhh; h e HEXN
