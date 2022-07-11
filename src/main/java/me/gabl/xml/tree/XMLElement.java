@@ -40,8 +40,18 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
     }
 
     @Override
+    public boolean hasAttributes() {
+        return !this.attributes.isEmpty();
+    }
+
+    @Override
     public List<XMLItem> items() {
         return Collections.unmodifiableList(items);
+    }
+
+    @Override
+    public boolean hasItems() {
+        return !this.items.isEmpty();
     }
 
     @NotNull
@@ -108,7 +118,7 @@ public final class XMLElement implements XMLItem.Element, Iterable<XMLItem> {
         }
 
         @Override
-        public Element build() {
+        public XMLElement build() {
             return new XMLElement(this.name, this.attributes, this.items);
         }
     }

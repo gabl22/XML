@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-sealed interface XMLItem {
+public sealed interface XMLItem {
 
     ItemType type();
 
@@ -31,7 +31,11 @@ sealed interface XMLItem {
 
         Map<String, String> attributes();
 
+        boolean hasAttributes();
+
         List<XMLItem> items();
+
+        boolean hasItems();
 
         sealed interface Builder permits XMLElement.Builder {
 
@@ -49,7 +53,7 @@ sealed interface XMLItem {
 
             boolean containsItems();
 
-            Element build();
+            XMLElement build();
         }
     }
 
