@@ -18,7 +18,7 @@ public final class XMLComment implements XMLItem.Text {
 
     @Override
     public ItemType type() {
-        return ItemType.RAW_TEXT;
+        return ItemType.COMMENT;
     }
 
     @Override
